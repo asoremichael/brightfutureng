@@ -404,3 +404,95 @@ if (contactForm) {
 
 
 
+
+
+
+
+
+
+
+
+// =====================================
+// SCROLL REVEAL ANIMATIONS
+// =====================================
+
+document.documentElement.classList.add("js-animations");
+
+const animatedElements = document.querySelectorAll("[data-animate]");
+
+if ("IntersectionObserver" in window) {
+  const animationObserver = new IntersectionObserver(
+    (entries, observer) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("is-visible");
+          observer.unobserve(entry.target);
+        }
+      });
+    },
+    {
+      threshold: 0.15
+    }
+  );
+
+  animatedElements.forEach((element) => {
+    animationObserver.observe(element);
+  });
+} else {
+  animatedElements.forEach((element) => {
+    element.classList.add("is-visible");
+  });
+}
+
+
+
+
+
+
+
+
+// =====================================
+// WEBSITE PAGE LOADER
+// =====================================
+
+const pageLoader = document.createElement("div");
+
+pageLoader.className = "page-loader";
+
+pageLoader.setAttribute("role", "status");
+pageLoader.setAttribute("aria-label", "Loading website");
+
+pageLoader.innerHTML = `
+  <div class="loader-content">
+
+    <div class="loader-logo">BF</div>
+
+    <div class="loader-spinner"></div>
+
+    <h2>BRIGHT FUTURE</h2>
+
+    <p>INTERNATIONAL SCHOOL</p>
+
+  </div>
+`;
+
+document.body.prepend(pageLoader);
+
+
+// Hide loader after the page finishes loading
+
+function hidePageLoader() {
+  pageLoader.classList.add("is-hidden");
+
+  setTimeout(() => {
+    pageLoader.remove();
+  }, 700);
+}
+
+if (document.readyState === "complete") {
+  setTimeout(hidePageLoader, 400);
+} else {
+  window.addEventListener("load", () => {
+    setTimeout(hidePageLoader, 400);
+  }, { once: true });
+}

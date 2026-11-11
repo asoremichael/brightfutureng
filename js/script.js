@@ -339,6 +339,7 @@ document.addEventListener("keydown", (event) => {
 });
 
 
+
 // ===================================
 // CONTACT FORM SUBMISSION
 // ===================================
@@ -346,12 +347,59 @@ document.addEventListener("keydown", (event) => {
 const contactForm = document.querySelector("#contactForm");
 
 if (contactForm) {
-  contactForm.addEventListener("submit", function () {
+
+  contactForm.addEventListener("submit", async function (event) {
+
+    event.preventDefault();
+
     const submitButton = contactForm.querySelector(".contact-submit-btn");
+
+    const originalButtonText = submitButton.innerHTML;
 
     submitButton.innerHTML = 'Sending... <i class="fas fa-spinner fa-spin"></i>';
     submitButton.disabled = true;
+
+    try {
+
+      const response = await fetch(
+        "https://formsubmit.co/ajax/brightfuturengg@gmail.com",
+        {
+          method: "POST",
+          body: new FormData(contactForm),
+          headers: {
+            "Accept": "application/json"
+          }
+        }
+      );
+
+      const result = await response.json();
+
+      if (response.ok && result.success) {
+
+        window.location.href = "thank-you.html";
+
+      } else {
+
+        alert("Sorry, your message could not be sent. Please try again.");
+
+        submitButton.innerHTML = originalButtonText;
+        submitButton.disabled = false;
+
+      }
+
+    } catch (error) {
+
+      alert("Something went wrong. Please check your internet connection and try again.");
+
+      submitButton.innerHTML = originalButtonText;
+      submitButton.disabled = false;
+
+      console.error("Contact form error:", error);
+
+    }
+
   });
+
 }
 
 
